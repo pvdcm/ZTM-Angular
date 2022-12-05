@@ -5,8 +5,8 @@
       
       <!-- Sort Videos -->
       <select (change)="sort($event)" class="text-black px-8 text-xl outline-none appearance-none">
-        <option value="1" [selected]="videoOrder === '1' " >Recent Uploads</option>
-        <option value="2" [selected]="videoOrder === '2' ">Oldest Uploads</option>
+        <option value="1" [selected]="videoOrder === '1' " >Uploads Recentes</option>
+        <option value="2" [selected]="videoOrder === '2' ">Uploads Antigos</option>
       </select>
     </div>
   </section>
@@ -18,7 +18,7 @@
       <div *ngFor="let clip of clips" class="mt-6 rounded-tl-2xl rounded-br-2xl shadow-xl bg-secondary flex flex-col justify-start">
   
         <!-- Image -->
-        <a href="#">
+        <a [routerLink]="['/', 'clip', clip.docID]">
           <img class="card-img-top rounded-tl-2xl w-full" [src]="clip.screenshotURL" crossorigin>
         </a>
   

@@ -89,7 +89,7 @@ export class ManageComponent implements OnInit {
       return
     }
 
-    const url = `${location.origin}/clips/${docID}`
+    const url = `${location.origin}/clip/${docID}`
     await navigator.clipboard.writeText(url)
 
     alert('Linked copied')

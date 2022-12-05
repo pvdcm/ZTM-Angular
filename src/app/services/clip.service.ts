@@ -115,7 +115,7 @@ export class ClipService implements Resolve<IClip | null> {
           this.router.navigate(['/'])
           return null
         }
-
+        window.scrollTo(0, 130);
         return data
       })
     )

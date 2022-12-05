@@ -16,6 +16,9 @@ export class ClipComponent implements OnInit {
   player?: videojs.Player
   clip?: IClip
 
+
+  
+
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {

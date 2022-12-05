@@ -39,7 +39,7 @@
         <!-- Form -->
         <form [formGroup]="uploadForm" (ngSubmit)="uploadFile()">
           <!-- Screenshots -->
-          <h2 class="mb-4 text-xl">Select a Thumbnail</h2>
+          <h2 class="mb-4 text-xl">Escolha a Thumbnail</h2>
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div *ngFor="let screenshot of screenshots" class="border-8 cursor-pointer"
             [ngClass]="{
@@ -52,8 +52,8 @@
 
           <!-- Title -->
           <div class="mt-4">
-            <label class="block text-xl mb-4">Title</label>
-            <app-input [control]="title" placeholder="Enter title"></app-input>
+            <label class="block text-xl mb-4">Titulo</label>
+            <app-input [control]="title" placeholder="Insira um titulo"></app-input>
           </div>
 
           <div class="mt-4 text-right">
@@ -63,7 +63,7 @@
               'opacity-50': inSubmission,
               'hover:bg-indigo-700': !inSubmission
             }">
-              Publish
+              Publicar
             </button>
           </div>
         </form>
