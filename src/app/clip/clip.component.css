@@ -68,21 +68,11 @@
 }
 
 
-
 .video-js,
 .video-js * {
   box-sizing: border-box;
 }
 
-.vjs-theme-forest .vjs-volume-bar:before {
-  border-left-width: 8em;
-  border-bottom-width: 5em;
-}
-
-.vjs-theme-forest .vjs-volume-level::before {
-  border-left-width: 6em;
-  border-bottom-width: 5em;
-}
 
 .vjs-theme-forest .vjs-progress-holder {
   height: 2em;
