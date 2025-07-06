@@ -38,7 +38,7 @@ export class ClipsListComponent implements OnInit,OnDestroy {
     const bottomOfWindow = Math.round(scrollTop) + innerHeight < offsetHeight - 100
 
     if (bottomOfWindow) {
-      this.clipService.getClips()
+      this.clipService.getClips(true)
     }
   }
 

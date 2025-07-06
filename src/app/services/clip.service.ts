@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, DocumentReference, QueryS
 import IClip from '../models/clip.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { switchMap, map } from 'rxjs/operators';
-import { of, BehaviorSubject, combineLatest,lastValueFrom } from 'rxjs';
+import { of, BehaviorSubject, combineLatest, lastValueFrom } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
@@ -71,7 +71,7 @@ export class ClipService implements Resolve<IClip | null> {
     await this.clipsCollection.doc(clip.docID).delete()
   }
 
-  async getClips() {
+  async getClips(randomize: boolean = false) {
     if (this.pendingReq) {
       return
     }
@@ -85,39 +85,57 @@ export class ClipService implements Resolve<IClip | null> {
 
     if (length) {
       const lastDocID = this.pageClips[length - 1].docID
-     // const lastDoc = await this.clipsCollection.doc(lastDocID).get()
-     const lastDoc = await lastValueFrom(this.clipsCollection.doc(lastDocID).get())
- 
+      // const lastDoc = await this.clipsCollection.doc(lastDocID).get()
+      const lastDoc = await lastValueFrom(this.clipsCollection.doc(lastDocID).get())
+
 
       query = query.startAfter(lastDoc)
     }
 
     const snapshot = await query.get()
+    const newClips: IClip[] = []
 
+    // Primeiro, coleta todos os clips
     snapshot.forEach(doc => {
-      this.pageClips.push({
+      newClips.push({
         docID: doc.id,
         ...doc.data()
       })
     })
 
+    // NOVA PARTE: Se randomize for true, embaralha
+    if (randomize) {
+      this.shuffleArray(newClips)
+    }
+
+    // Adiciona ao array principal
+    this.pageClips.push(...newClips)
     this.pendingReq = false
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.clipsCollection.doc(route.params['id'])
-    .get()
-    .pipe(
-      map(snapshot => {
-        const data = snapshot.data()
-        
-        if(!data){
-          this.router.navigate(['/'])
-          return null
-        }
-        window.scrollTo(0, 130);
-        return data
-      })
-    )
+      .get()
+      .pipe(
+        map(snapshot => {
+          const data = snapshot.data()
+
+          if (!data) {
+            this.router.navigate(['/'])
+            return null
+          }
+          window.scrollTo(0, 130);
+          return data
+        })
+      )
   }
+
+  private shuffleArray<T>(array: T[]): T[] {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
 }
