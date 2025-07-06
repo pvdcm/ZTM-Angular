@@ -7,7 +7,6 @@ import { of, BehaviorSubject, combineLatest, lastValueFrom } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +15,8 @@ export class ClipService implements Resolve<IClip | null> {
   public clipsCollection: AngularFirestoreCollection<IClip>
   pageClips: IClip[] = []
   pendingReq = false
+  // ADICIONADO: Para controlar clips já carregados no modo aleatório
+  private loadedRandomClips: Set<string> = new Set()
 
   constructor(
     private db: AngularFirestore,
@@ -77,40 +78,82 @@ export class ClipService implements Resolve<IClip | null> {
     }
 
     this.pendingReq = true
-    let query = this.clipsCollection.ref.orderBy(
-      'timestamp', 'desc'
-    ).limit(6)
+    
+    try {
+      if (randomize) {
+        // MODO ALEATÓRIO: Busca clips que ainda não foram carregados
+        const query = this.clipsCollection.ref
+          .orderBy('timestamp', 'desc')
+          .limit(50) // Busca mais clips para ter melhor variedade
 
-    const { length } = this.pageClips
+        const snapshot = await query.get()
+        const availableClips: IClip[] = []
 
-    if (length) {
-      const lastDocID = this.pageClips[length - 1].docID
-      // const lastDoc = await this.clipsCollection.doc(lastDocID).get()
-      const lastDoc = await lastValueFrom(this.clipsCollection.doc(lastDocID).get())
+        snapshot.forEach(doc => {
+          const clipData = {
+            docID: doc.id,
+            ...doc.data()
+          } as IClip
 
+          // Só adiciona se ainda não foi carregado
+          if (!this.loadedRandomClips.has(doc.id)) {
+            availableClips.push(clipData)
+          }
+        })
 
-      query = query.startAfter(lastDoc)
+        // Se não há clips novos disponíveis, resetar o controle
+        if (availableClips.length < 6) {
+          this.loadedRandomClips.clear()
+          // Recarregar todos os clips
+          snapshot.forEach(doc => {
+            availableClips.push({
+              docID: doc.id,
+              ...doc.data()
+            } as IClip)
+          })
+        }
+
+        // Embaralhar e pegar 6 aleatórios
+        this.shuffleArray(availableClips)
+        const randomClips = availableClips.slice(0, 6)
+        
+        // Marcar como carregados
+        randomClips.forEach(clip => {
+          this.loadedRandomClips.add(clip.docID!)
+        })
+
+        this.pageClips.push(...randomClips)
+
+      } else {
+        // MODO NORMAL: Paginação como antes
+        let query = this.clipsCollection.ref.orderBy('timestamp', 'desc').limit(6)
+
+        const { length } = this.pageClips
+        if (length) {
+          const lastDocID = this.pageClips[length - 1].docID
+          const lastDoc = await lastValueFrom(this.clipsCollection.doc(lastDocID).get())
+          query = query.startAfter(lastDoc)
+        }
+
+        const snapshot = await query.get()
+        snapshot.forEach(doc => {
+          this.pageClips.push({
+            docID: doc.id,
+            ...doc.data()
+          } as IClip)
+        })
+      }
+    } catch (error) {
+      console.error('Erro ao carregar clips:', error)
+    } finally {
+      this.pendingReq = false
     }
+  }
 
-    const snapshot = await query.get()
-    const newClips: IClip[] = []
-
-    // Primeiro, coleta todos os clips
-    snapshot.forEach(doc => {
-      newClips.push({
-        docID: doc.id,
-        ...doc.data()
-      })
-    })
-
-    // NOVA PARTE: Se randomize for true, embaralha
-    if (randomize) {
-      this.shuffleArray(newClips)
-    }
-
-    // Adiciona ao array principal
-    this.pageClips.push(...newClips)
-    this.pendingReq = false
+  // ADICIONADO: Método para resetar clips e controle de aleatórios
+  resetClips() {
+    this.pageClips = []
+    this.loadedRandomClips.clear()
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -137,5 +180,4 @@ export class ClipService implements Resolve<IClip | null> {
     }
     return array;
   }
-
 }
