@@ -1,6 +1,14 @@
 @import '~video.js/dist/video-js.css';
 @import '~@videojs/themes/dist/forest/index.css';
 
+
+:root {
+  --vjs-primary-color: rgb(129, 140, 248);
+  --vjs-control-size: 6em;
+  --vjs-button-size: 6em;
+  --vjs-volume-width: 8em;
+}
+
 /* Video.js CSS START */
 .vjs-theme-forest {
     --vjs-theme-forest--primary: rgb(129, 140, 248);
@@ -13,19 +21,30 @@
   
   .video-js {
     position: initial;
+    width: 100%;
+    height: 100%;
   }
   
   .video-js .vjs-control-bar {
-    height: 6em;
+    height: var(--vjs-control-size);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
   }
-  
-  .vjs-button>.vjs-icon-placeholder:before {
-    font-size: 3.8em;
+
+  @media (max-width: 768px) {
+  .video-js .vjs-control-bar {
+    height: 4em;
   }
   
   .video-js .vjs-button {
-    width: 6em;
+    width: 4em;
   }
+  
+  .vjs-button > .vjs-icon-placeholder:before {
+    font-size: 2.5em;
+  }
+}
+  
   
   .vjs-theme-forest .vjs-volume-bar.vjs-slider-horizontal,
   .vjs-theme-forest .vjs-volume-panel,
