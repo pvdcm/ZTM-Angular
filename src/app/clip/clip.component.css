@@ -67,39 +67,6 @@
   margin-right: 0;
 }
 
-@media (max-width: 768px) and (orientation: landscape) {
-  .video-js .vjs-control-bar {
-    height: 3em;
-  }
-
-  .video-js .vjs-button {
-    width: 3em;
-  }
-
-  .vjs-button>.vjs-icon-placeholder:before {
-    font-size: 2em;
-  }
-}
-
-
-/* Garantir que controles não quebrem o layout */
-.video-js .vjs-control-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  overflow: hidden;
-}
-
-/* Ajustar tooltip para não sair da tela */
-.video-js .vjs-time-tooltip {
-  max-width: 200px;
-  text-align: center;
-  word-wrap: break-word;
-}
-
-
-
 
 
 .video-js,
@@ -132,6 +99,148 @@
 
 .video-js .vjs-time-control {
   font-size: 2em;
+}
+
+
+@media (max-width: 768px) {
+  /* Container do vídeo */
+  .video-js {
+    font-size: 10px; /* Reduz a escala base */
+  }
+  
+  /* Barra de controles menor */
+  .video-js .vjs-control-bar {
+    height: 2.5em !important;
+    padding: 0 0.5em;
+  }
+  
+  /* Botões menores */
+  .video-js .vjs-button {
+    width: 2.5em !important;
+    height: 2.5em !important;
+  }
+  
+  /* Ícones menores */
+  .vjs-button > .vjs-icon-placeholder:before {
+    font-size: 1.8em !important;
+    line-height: 2.5;
+  }
+  
+  /* Botão de play grande menor */
+  .vjs-theme-forest .vjs-big-play-button {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50%;
+    font-size: 2em;
+  }
+  
+  /* Barra de progresso menor */
+  .vjs-theme-forest .vjs-progress-holder {
+    height: 0.3em !important;
+  }
+  
+  /* Controle de tempo menor */
+  .video-js .vjs-time-control {
+    font-size: 1em !important;
+    padding: 0 0.2em;
+  }
+  
+  /* Volume panel ajustado */
+  .vjs-theme-forest .vjs-volume-panel {
+    width: 2em !important;
+  }
+  
+  .vjs-theme-forest .vjs-volume-bar.vjs-slider-horizontal,
+  .vjs-theme-forest .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-slider-active,
+  .vjs-theme-forest .vjs-volume-panel.vjs-volume-panel-horizontal:hover {
+    width: 3em !important;
+  }
+  
+  .video-js .vjs-volume-panel .vjs-volume-control.vjs-volume-horizontal {
+    width: 3em !important;
+    height: 2.5em !important;
+  }
+  
+  /* Tooltip menor */
+  .video-js .vjs-time-tooltip {
+    font-size: 0.8em !important;
+    top: -1.5em;
+    padding: 2px 4px;
+  }
+  
+  /* Fullscreen e picture-in-picture menores */
+  .video-js .vjs-fullscreen-control,
+  .video-js .vjs-picture-in-picture-control {
+    width: 2.5em !important;
+  }
+}
+
+/* Mobile em modo paisagem - controles ainda menores */
+@media (max-width: 768px) and (orientation: landscape) {
+  .video-js .vjs-control-bar {
+    height: 2em !important;
+  }
+  
+  .video-js .vjs-button {
+    width: 2em !important;
+    height: 2em !important;
+  }
+  
+  .vjs-button > .vjs-icon-placeholder:before {
+    font-size: 1.4em !important;
+    line-height: 2;
+  }
+  
+  .video-js .vjs-time-control {
+    font-size: 0.8em !important;
+  }
+}
+
+/* Telas muito pequenas (menos de 480px) */
+@media (max-width: 480px) {
+  .video-js {
+    font-size: 8px; /* Ainda menor para celulares pequenos */
+  }
+  
+  .video-js .vjs-control-bar {
+    height: 2em !important;
+    padding: 0 0.3em;
+  }
+  
+  .video-js .vjs-button {
+    width: 2em !important;
+    height: 2em !important;
+  }
+  
+  .vjs-button > .vjs-icon-placeholder:before {
+    font-size: 1.5em !important;
+  }
+  
+  .vjs-theme-forest .vjs-big-play-button {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 1.5em;
+  }
+  
+  /* Esconder alguns controles em telas muito pequenas */
+  .video-js .vjs-volume-panel,
+  .video-js .vjs-picture-in-picture-control {
+    display: none !important;
+  }
+}
+
+/* Garantir que o container pai não cause overflow */
+.container {
+  max-width: 100% !important;
+  overflow-x: hidden;
+}
+
+/* Padding responsivo */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 
 /* Video.js CSS END */
