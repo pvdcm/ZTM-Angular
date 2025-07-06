@@ -1,42 +1,99 @@
+<!-- Controles de Ordenação (apenas se scrollable for true) -->
+<div class="controls mb-6" *ngIf="scrollable">
+  <div class="flex gap-3 justify-center">
+    <!-- Botão para alternar ordem -->
+    <button 
+      (click)="toggleRandomMode()"
+      class="px-6 py-3 rounded-tl-2xl rounded-br-2xl font-semibold transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+      [class]="randomMode ? 'bg-purple-600 text-white shadow-xl' : 'bg-secondary text-gray-300 hover:bg-gray-600'">
+      <span class="mr-2">{{ randomMode ? '🎲' : '📅' }}</span>
+      {{ randomMode ? 'Ordem Aleatória' : 'Ordem por Data' }}
+    </button>
+    
+    <!-- Botão para atualizar -->
+    <button 
+      (click)="refreshClips()"
+      class="px-6 py-3 bg-blue-600 text-white rounded-tl-2xl rounded-br-2xl font-semibold transition-all duration-300 transform hover:-translate-y-1 hover:bg-blue-700 hover:shadow-lg">
+      🔄 Atualizar
+    </button>
+  </div>
+  
+  <!-- Indicador do modo atual -->
+  <div class="text-center mt-3">
+    <span class="text-sm text-gray-400">
+      {{ randomMode ? 'Mostrando clips em ordem aleatória' : 'Mostrando clips mais recentes primeiro' }}
+    </span>
+  </div>
+</div>
+
 <!-- Clips List -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-    <a *ngFor="let clip of clipService.pageClips" 
-      [routerLink]="['/', 'clip', clip.docID]"
-      class="mt-6 rounded-tl-2xl rounded-br-2xl shadow-xl bg-secondary transform hover:-translate-y-2 hover:shadow-2xl transition duration-300">
-  
-      <!-- Image -->
-      <img class="card-img-top rounded-tl-2xl w-full" 
-        [src]="clip.screenshotURL" crossorigin>
-  
-      <!-- Shape -->
-      <div class="relative">
-        <div class="absolute pointer-events-none bottom-full w-full bg-secondary text-white">
-          <div class="absolute bottom-full w-full pb-5 overflow-hidden">
-            <svg viewBox="0 0 100 50" preserveAspectRatio="none" class="absolute bottom-0 w-full h-full tranform"
-              style="transform-origin: top center; transform: scale(2);">
-              <path d="M0 25h25L75 0h25v50H0z" fill="#283046"></path>
-            </svg>
-          </div>
+  <a *ngFor="let clip of clipService.pageClips" 
+    [routerLink]="['/', 'clip', clip.docID]"
+    class="mt-6 rounded-tl-2xl rounded-br-2xl shadow-xl bg-secondary transform hover:-translate-y-2 hover:shadow-2xl transition duration-300">
+
+    <!-- Image -->
+    <img class="card-img-top rounded-tl-2xl w-full" 
+      [src]="clip.screenshotURL" 
+      crossorigin
+      [alt]="clip.title">
+
+    <!-- Shape -->
+    <div class="relative">
+      <div class="absolute pointer-events-none bottom-full w-full bg-secondary text-white">
+        <div class="absolute bottom-full w-full pb-5 overflow-hidden">
+          <svg viewBox="0 0 100 50" preserveAspectRatio="none" class="absolute bottom-0 w-full h-full tranform"
+            style="transform-origin: top center; transform: scale(2);">
+            <path d="M0 25h25L75 0h25v50H0z" fill="#283046"></path>
+          </svg>
         </div>
       </div>
-  
-      <!-- Body -->
-      <div class="p-8">
-  
-        <!-- Heading -->
-        <h2 class="text-3xl mb-2">
-          {{ clip.title }}
-        </h2>
-  
-        <!-- Name & Date -->
-        <p class="mb-0">
-          {{ clip.displayName }} &#183; 
-          <span class="text-gray-400">
-            {{ clip.timestamp | fbTimestamp }}
-          </span>
-        </p>
-  
-      </div>
-  
-    </a>
+    </div>
+
+    <!-- Body -->
+    <div class="p-8">
+
+      <!-- Heading -->
+      <h2 class="text-3xl mb-2">
+        {{ clip.title }}
+      </h2>
+
+      <!-- Name & Date -->
+      <p class="mb-0">
+        {{ clip.displayName }} &#183; 
+        <span class="text-gray-400">
+          {{ clip.timestamp | fbTimestamp }}
+        </span>
+      </p>
+
+    </div>
+
+  </a>
+</div>
+
+<!-- Loading Indicator -->
+<div *ngIf="clipService.pendingReq" class="text-center py-12">
+  <div class="inline-flex items-center gap-3 px-6 py-3 bg-secondary rounded-tl-2xl rounded-br-2xl shadow-lg">
+    <div class="animate-spin w-6 h-6 border-3 border-blue-600 border-t-transparent rounded-full"></div>
+    <span class="text-lg">
+      Carregando{{ randomMode ? ' clips aleatórios' : ' mais clips' }}...
+    </span>
   </div>
+</div>
+
+<!-- Empty State -->
+<div *ngIf="clipService.pageClips.length === 0 && !clipService.pendingReq" 
+     class="text-center py-16">
+  <div class="bg-secondary rounded-tl-2xl rounded-br-2xl shadow-xl p-12 max-w-md mx-auto">
+    <div class="text-6xl mb-4">📹</div>
+    <h3 class="text-2xl font-bold mb-2">Nenhum clip encontrado</h3>
+    <p class="text-gray-400 mb-6">
+      {{ randomMode ? 'Tente alternar para ordem por data' : 'Seja o primeiro a fazer upload!' }}
+    </p>
+    <button 
+      (click)="refreshClips()"
+      class="px-6 py-3 bg-blue-600 text-white rounded-tl-2xl rounded-br-2xl font-semibold hover:bg-blue-700 transition duration-300">
+      🔄 Tentar Novamente
+    </button>
+  </div>
+</div>
