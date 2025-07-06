@@ -1,11 +1,10 @@
 @import '~video.js/dist/video-js.css';
 @import '~@videojs/themes/dist/forest/index.css';
 
-
 :root {
   --vjs-primary-color: rgb(129, 140, 248);
   --vjs-control-size: 4em;
-  --vjs-button-size: 6em;
+  --vjs-button-size: 4em;
   --vjs-volume-width: 6em;
 }
 
@@ -25,98 +24,146 @@
   height: 100%;
 }
 
+/* ========================================= */
+/* CORREÇÕES PARA DESKTOP/TELAS GRANDES */
+/* ========================================= */
+
 .video-js .vjs-control-bar {
   height: var(--vjs-control-size);
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
 }
 
-@media (max-width: 768px) {
-  .video-js .vjs-control-bar {
-    height: 4em;
-  }
-
-  .video-js .vjs-button {
-    width: 4em;
-  }
-
-  .vjs-button>.vjs-icon-placeholder:before {
-    font-size: 2.5em;
-  }
+.video-js .vjs-button {
+  width: var(--vjs-button-size);
+  height: var(--vjs-button-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.vjs-button > .vjs-icon-placeholder:before {
+  font-size: 2em;
+  line-height: 1;
+}
 
-.vjs-theme-forest .vjs-volume-bar.vjs-slider-horizontal,
-.vjs-theme-forest .vjs-volume-panel,
-.vjs-theme-forest .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-slider-active,
-.vjs-theme-forest .vjs-volume-panel.vjs-volume-panel-horizontal:hover,
-.vjs-theme-forest .vjs-volume-panel:active .vjs-volume-control.vjs-volume-horizontal,
+/* ========================================= */
+/* CONTROLE DE VOLUME - DESKTOP */
+/* ========================================= */
+
+/* Volume Panel - Estado Normal */
+.vjs-theme-forest .vjs-volume-panel {
+  width: var(--vjs-button-size) !important;
+  height: var(--vjs-control-size) !important;
+  display: flex !important;
+  align-items: center !important;
+  transition: width 0.3s ease;
+}
+
+/* Volume Panel - Estado Expandido */
 .vjs-theme-forest .vjs-volume-panel:hover,
-.vjs-theme-forest .vjs-volume-panel:hover .vjs-volume-control.vjs-volume-horizontal {
-  width: 8em;
+.vjs-theme-forest .vjs-volume-panel.vjs-volume-panel-horizontal:hover,
+.vjs-theme-forest .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-slider-active {
+  width: 10em !important;
 }
 
+/* Volume Control - Barra Horizontal */
+.video-js .vjs-volume-panel .vjs-volume-control.vjs-volume-horizontal {
+  width: 0 !important; /* Escondido por padrão */
+  height: var(--vjs-control-size) !important;
+  margin-right: 0 !important;
+  opacity: 0;
+  transition: all 0.3s ease;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Volume Control - Estado Expandido */
+.video-js .vjs-volume-panel:hover .vjs-volume-control.vjs-volume-horizontal,
+.video-js .vjs-volume-panel.vjs-hover .vjs-volume-control.vjs-volume-horizontal,
 .video-js .vjs-volume-panel .vjs-volume-control.vjs-slider-active.vjs-volume-horizontal,
 .video-js .vjs-volume-panel .vjs-volume-control:active.vjs-volume-horizontal,
-.video-js .vjs-volume-panel.vjs-hover .vjs-mute-control~.vjs-volume-control.vjs-volume-horizontal,
-.video-js .vjs-volume-panel.vjs-hover .vjs-volume-control.vjs-volume-horizontal,
 .video-js .vjs-volume-panel:active .vjs-volume-control.vjs-volume-horizontal,
 .video-js .vjs-volume-panel:focus .vjs-volume-control.vjs-volume-horizontal {
-  width: 8em;
-  height: 6em;
-  margin-right: 0;
+  width: 6em !important;
+  opacity: 1 !important;
 }
 
+/* Botão de Mute */
+.video-js .vjs-volume-panel .vjs-mute-control {
+  width: var(--vjs-button-size) !important;
+  height: var(--vjs-control-size) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Volume Bar - Geometria Corrigida */
+.vjs-theme-forest .vjs-volume-bar:before {
+  border-left-width: 6em !important;
+  border-bottom-width: 3em !important;
+}
+
+.vjs-theme-forest .vjs-volume-level::before {
+  border-left-width: 6em !important;
+  border-bottom-width: 3em !important;
+}
+
+/* ========================================= */
+/* OUTROS CONTROLES - DESKTOP */
+/* ========================================= */
+
+.vjs-theme-forest .vjs-progress-holder {
+  height: 1.5em;
+}
+
+.video-js .vjs-progress-control:hover .vjs-progress-holder:focus .vjs-time-tooltip,
+.video-js .vjs-progress-control:hover .vjs-time-tooltip {
+  font-size: 1.2em;
+}
+
+.video-js .vjs-time-tooltip {
+  top: -1.8em;
+}
+
+.video-js .vjs-time-control {
+  font-size: 1.4em;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5em;
+}
 
 .video-js,
 .video-js * {
   box-sizing: border-box;
 }
 
-
-.vjs-theme-forest .vjs-progress-holder {
-  height: 2em;
-}
-
-.video-js .vjs-progress-control:hover .vjs-progress-holder:focus .vjs-time-tooltip,
-.video-js .vjs-progress-control:hover .vjs-time-tooltip {
-  font-size: 2em;
-}
-
-.video-js .vjs-time-tooltip {
-  top: -2em;
-}
-
-.video-js .vjs-time-control {
-  font-size: 2em;
-}
-
+/* ========================================= */
+/* RESPONSIVIDADE - MOBILE */
+/* ========================================= */
 
 @media (max-width: 768px) {
-  /* Container do vídeo */
   .video-js {
-    font-size: 10px; /* Reduz a escala base */
+    font-size: 10px;
   }
   
-  /* Barra de controles menor */
   .video-js .vjs-control-bar {
     height: 2.5em !important;
     padding: 0 0.5em;
   }
   
-  /* Botões menores */
   .video-js .vjs-button {
     width: 2.5em !important;
     height: 2.5em !important;
   }
   
-  /* Ícones menores */
   .vjs-button > .vjs-icon-placeholder:before {
     font-size: 1.8em !important;
     line-height: 2.5;
   }
   
-  /* Botão de play grande menor */
   .vjs-theme-forest .vjs-big-play-button {
     width: 60px !important;
     height: 60px !important;
@@ -124,48 +171,33 @@
     font-size: 2em;
   }
   
-  /* Barra de progresso menor */
   .vjs-theme-forest .vjs-progress-holder {
     height: 0.3em !important;
   }
   
-  /* Controle de tempo menor */
   .video-js .vjs-time-control {
     font-size: 1em !important;
     padding: 0 0.2em;
   }
   
-  /* Volume panel ajustado */
+  /* Volume - ESCONDER EM MOBILE */
   .vjs-theme-forest .vjs-volume-panel {
-    width: 2em !important;
+    display: none !important;
   }
   
-  .vjs-theme-forest .vjs-volume-bar.vjs-slider-horizontal,
-  .vjs-theme-forest .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-slider-active,
-  .vjs-theme-forest .vjs-volume-panel.vjs-volume-panel-horizontal:hover {
-    width: 3em !important;
-  }
-  
-  .video-js .vjs-volume-panel .vjs-volume-control.vjs-volume-horizontal {
-    width: 3em !important;
-    height: 2.5em !important;
-  }
-  
-  /* Tooltip menor */
   .video-js .vjs-time-tooltip {
     font-size: 0.8em !important;
     top: -1.5em;
     padding: 2px 4px;
   }
   
-  /* Fullscreen e picture-in-picture menores */
   .video-js .vjs-fullscreen-control,
   .video-js .vjs-picture-in-picture-control {
     width: 2.5em !important;
   }
 }
 
-/* Mobile em modo paisagem - controles ainda menores */
+/* Mobile em modo paisagem */
 @media (max-width: 768px) and (orientation: landscape) {
   .video-js .vjs-control-bar {
     height: 2em !important;
@@ -186,10 +218,10 @@
   }
 }
 
-/* Telas muito pequenas (menos de 480px) */
+/* Telas muito pequenas */
 @media (max-width: 480px) {
   .video-js {
-    font-size: 8px; /* Ainda menor para celulares pequenos */
+    font-size: 8px;
   }
   
   .video-js .vjs-control-bar {
@@ -212,20 +244,18 @@
     font-size: 1.5em;
   }
   
-  /* Esconder alguns controles em telas muito pequenas */
   .video-js .vjs-volume-panel,
   .video-js .vjs-picture-in-picture-control {
     display: none !important;
   }
 }
 
-/* Garantir que o container pai não cause overflow */
+/* Container responsivo */
 .container {
   max-width: 100% !important;
   overflow-x: hidden;
 }
 
-/* Padding responsivo */
 @media (max-width: 640px) {
   .container {
     padding-left: 1rem;
