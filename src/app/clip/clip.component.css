@@ -4,7 +4,7 @@
 
 :root {
   --vjs-primary-color: rgb(129, 140, 248);
-  --vjs-control-size: 6em;
+  --vjs-control-size: 4em;
   --vjs-button-size: 6em;
   --vjs-volume-width: 6em;
 }
@@ -53,7 +53,7 @@
 .vjs-theme-forest .vjs-volume-panel:active .vjs-volume-control.vjs-volume-horizontal,
 .vjs-theme-forest .vjs-volume-panel:hover,
 .vjs-theme-forest .vjs-volume-panel:hover .vjs-volume-control.vjs-volume-horizontal {
-  width: 6em;
+  width: 8em;
 }
 
 .video-js .vjs-volume-panel .vjs-volume-control.vjs-slider-active.vjs-volume-horizontal,
@@ -62,8 +62,8 @@
 .video-js .vjs-volume-panel.vjs-hover .vjs-volume-control.vjs-volume-horizontal,
 .video-js .vjs-volume-panel:active .vjs-volume-control.vjs-volume-horizontal,
 .video-js .vjs-volume-panel:focus .vjs-volume-control.vjs-volume-horizontal {
-  width: 6em;
-  height: 4em;
+  width: 8em;
+  height: 6em;
   margin-right: 0;
 }
 
@@ -80,7 +80,7 @@
 }
 
 .vjs-theme-forest .vjs-volume-level::before {
-  border-left-width: 8em;
+  border-left-width: 6em;
   border-bottom-width: 5em;
 }
 
